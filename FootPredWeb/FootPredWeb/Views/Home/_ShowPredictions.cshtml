@@ -1,0 +1,45 @@
+﻿@model FootPredWeb.Models.PredictionsModel
+
+<row class="col-md-6">
+    <table class="table">
+
+        <tr>
+            <td>@Model.Team1.Name to win</td>
+            <td>@Model.MatchDigiOdds.Item1.ToString("0.00")</td>
+            <td>@Model.MatchOldEnglishOdds.Item1</td>
+        </tr>
+        <tr>
+            <td>@Model.Team2.Name to win</td>
+            <td>@Model.MatchDigiOdds.Item2.ToString("0.00")</td>
+            <td>@Model.MatchOldEnglishOdds.Item2</td>
+        </tr>
+        <tr>
+            <td>The draw</td>
+            <td>@Model.MatchDigiOdds.Item3.ToString("0.00")</td>
+            <td>@Model.MatchOldEnglishOdds.Item3</td>
+        </tr>
+    </table>
+</row>
+
+<table class="table table-bordered">
+    <tr>
+        <th></th>
+        @for (int i = 0; i < @Model.ScoreGrid.Length; i++)
+        {
+            <th>@i</th>
+        }
+    </tr>
+
+
+    @for (int i = 0; i < @Model.ScoreGrid.Length; i++)
+    {
+        <tr>
+            <td>@i</td>
+            @foreach (var x in @Model.ScoreGrid[i])
+            {
+                <td>@x.ToString("0.00")</td>
+            }
+        </tr>
+    }
+
+</table>

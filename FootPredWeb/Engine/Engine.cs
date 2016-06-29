@@ -20,48 +20,50 @@ namespace Engine
         {
             teams = new List<Team>();
 
-            using (StreamReader reader = new StreamReader(File.OpenRead(@".\\..\\..\\..\\Files\\rankings.csv")))
+            //using (StreamReader reader = new StreamReader(File.OpenRead(@".\\..\\..\\..\\Files\\rankings.csv")))
+            //{
+            //    while (!reader.EndOfStream)
+            //   {
+            foreach (string line in Rankings.AllRankings.Split(new string[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries))
             {
-                while (!reader.EndOfStream)
+                //var line = reader.ReadLine();
+                var values = line.Split(',');
+
+                try
                 {
-                    var line = reader.ReadLine();
-                    var values = line.Split(',');
-
-                    try
+                    int[] rankings = new int[]
                     {
-                        int[] rankings = new int[]
-                        {
                         int.Parse(values[1]), int.Parse(values[3]), int.Parse(values[5]), int.Parse(values[7])
-                        };
+                    };
 
-                        double[] points = new double[]
-                        {
-                        double.Parse(values[2]), double.Parse(values[4]), double.Parse(values[6]), double.Parse(values[8])
-                        };
-
-                        teams.Add(new Team(values[0], rankings, points));
-                    }
-                    catch(System.FormatException)
+                    double[] points = new double[]
                     {
-                        // just continue if we can't read it
-                    }
+                        double.Parse(values[2]), double.Parse(values[4]), double.Parse(values[6]), double.Parse(values[8])
+                    };
+
+                    teams.Add(new Team(values[0], rankings, points));
+                }
+                catch (System.FormatException)
+                {
+                    // just continue if we can't read it
                 }
             }
+            //}
         }
 
-        public Tuple<double, double, double> GetMatchOdds(Team team1, Team team2)
+        public Tuple<double, double, double> GetMatchProbs(Team team1, Team team2)
         {
-            return GlmLogit1Predictor.GetMatchOdds(team1, team2);
+            return GlmLogit1Predictor.GetMatchProbs(team1, team2);
         }
 
-        public double[,] GetScoreGrid(Team team1, Team team2)
+        public double[][] GetScoreGrid(Team team1, Team team2)
         {
             return GlmLogit1Predictor.GetScoreGrid(team1, team2);
         }
 
         public Team TeamFromName(string name)
         {
-            return teams.First(x => x.Name.ToLowerInvariant() == name.ToLowerInvariant());            
+            return teams.FirstOrDefault(x => x.Name.ToLowerInvariant() == name.ToLowerInvariant());
         }
     }
 }
