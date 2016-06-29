@@ -1,7 +1,25 @@
 ﻿@{
     ViewBag.Title = "About";
 }
-<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>
 
-<p>Use this area to provide additional information.</p>
+<h3>Is it effective?</h3>
+I dunno. The results seem plausible. I'm still improving it.
+
+<h3>Why do Betting exchanges give different results?</h3>
+Probably a combination of:<br/>
+(a) My model is better than 'what Joe Bloggs reckons'.<br/>
+(b) My model is a massive simplification of reality.<br />
+(c) My model could be fundamentally broken somehow.<br/>
+I think draws are, in reality, more likely than my model predicts.
+
+<h3>How does it work?</h3>
+I use a mixture of two models:
+<ol>
+   <li>Using ELO to predict game outcome, based on team ELO scores. Draw probabilities are dervied via a logistic regression of how ELOs cause historical draws.</li>
+   <li>Finding a link between FIFA rankings and international game outcome by logistic regression.</li>
+</ol>
+Anticipated goals per game are derived from team ability, again via logistic regression of a formula based on ranking points.<br/>
+These are then to use to derive the parameters of a Poisson distribution to generate the score outcomes.
+
+<h3>Bugs?</h3>
+I don't know the ELO of some obscure teams (e.g. Brunei, Kosovo, etc) so it'll give incorrect results for them. Any famous team is known, though.

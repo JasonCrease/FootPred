@@ -14,7 +14,7 @@ namespace EngineTester
             Engine.Engine engine = new Engine.Engine();
 
             Team team1 = engine.TeamFromName("Belgium");
-            Team team2 = engine.TeamFromName("Germany");
+            Team team2 = engine.TeamFromName("Italy");
 
             var probs = engine.GetMatchProbs(team1, team2);
             var scoreGrid = engine.GetScoreGrid(team1, team2);

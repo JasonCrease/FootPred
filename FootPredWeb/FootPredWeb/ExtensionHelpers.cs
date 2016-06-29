@@ -21,5 +21,18 @@ namespace FootPredWeb
 
             throw new Exception("Can't get here");
         }
+        public static String RoundTo3Sf(this double digitalodds)
+        {
+            double dos = digitalodds;
+
+            if (dos < 1)
+                return dos.ToString("0.000");
+            else if (dos < 5)
+                return dos.ToString("0.00");
+            else if (dos < 30)
+                return dos.ToString("0.0");
+            else
+                return dos.ToString("0");
+        }
     }
 }

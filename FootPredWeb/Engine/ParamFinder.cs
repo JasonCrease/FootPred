@@ -14,16 +14,14 @@ namespace Engine
         /// <param name="p1"></param>
         /// <param name="p2"></param>
         /// <returns></returns>
-        public static Tuple<double, double> FindParams(double p1, double p2)
+        public static Tuple<double, double> FindParams(double p1, double p2, double goalsPerGame)
         {
             double bestParam1 = 0;
             double bestParam2 = 0;
             double bestParam1Cum = 0;
             double bestParam2Cum = 0;
-
-            double goalsPerGame = 2.4;
-
-            for (double tp1 = 0; tp1 < goalsPerGame; tp1 += 0.1)
+            
+            for (double tp1 = 0; tp1 < goalsPerGame; tp1 += 0.01)
                 {
                     double tp2 = goalsPerGame - tp1;
 

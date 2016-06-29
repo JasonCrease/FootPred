@@ -2,38 +2,42 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="row">
-    <p class="lead">Enter the teams</p>
-    @using (Ajax.BeginForm("ShowPredictions", "Home",
-                                    new AjaxOptions
-                                    {
-                                        HttpMethod = "POST",
-                                        UpdateTargetId = "div1",
-                                        InsertionMode = InsertionMode.Replace,
-                                        LoadingElementId = "waitimage"
-                                    }))
-    {
+@using (Ajax.BeginForm("ShowPredictions", "Home",
+                                                    new AjaxOptions
+                                                    {
+                                                        HttpMethod = "POST",
+                                                        UpdateTargetId = "predsDiv",
+                                                        InsertionMode = InsertionMode.Replace,
+                                                        LoadingElementId = "waitimage"
+                                                    }))
+{
+    <div class="row">
+        <h2>Enter two international teams</h2>
         <div class="col-md-3">
-            <h3>Team1</h3>
+            <h4>Team 1</h4>
             <p>@Html.TextBox("team1")</p>
         </div>
 
         <div class="col-md-3">
-            <h3>Team2</h3>
+            <h4>Team 2</h4>
             <p>@Html.TextBox("team2")</p>
         </div>
-        <input type="submit" value="Calculate" />
-    }
-</div>
 
-<img id="waitimage" src="~/Images/ajax-loader.gif" style="display:none" />
+    </div>
+    <br />
+    <div class="row">
+        <input type="submit" value="Show odds" class="btn btn-primary btn-lg" />
+    </div>
+
+}
+
 <br />
-<div id="div1">
-</div>
+<img id="waitimage" src="~/Images/ajax-loader.gif" style="display:none" />
+<div id="predsDiv" />
 
 
 
-<script type="text/javascript">
+        <script type="text/javascript">
     $(document).ready(function () {
         $("#team1").autocomplete({
             source: function (request, response) {
@@ -65,7 +69,7 @@
         }
     );
     });
-</script>
+        </script>
 
 
 

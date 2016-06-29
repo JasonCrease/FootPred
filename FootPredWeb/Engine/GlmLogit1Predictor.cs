@@ -10,24 +10,17 @@ namespace Engine
     {
         public static Tuple<double, double, double> GetMatchProbs(Team team1, Team team2)
         {
-            double team1Home = Logit(team1.FifaPoints[0], team2.FifaPoints[0], 1);
-            double team1Away = Logit(team1.FifaPoints[0], team2.FifaPoints[0], 0);
-            double team2Home = Logit(team2.FifaPoints[0], team1.FifaPoints[0], 1);
-            double team2Away = Logit(team2.FifaPoints[0], team1.FifaPoints[0], 0);
-            double drawHome  = LogitDraw(team1.FifaPoints[0], team2.FifaPoints[0], 1);
-            double drawAway  = LogitDraw(team1.FifaPoints[0], team2.FifaPoints[0], 0);
+            double team1prob = Logit(team1.FifaPoints[0], team2.FifaPoints[0], 0);
+            double team2prob = Logit(team2.FifaPoints[0], team1.FifaPoints[0], 1);
+            double drawprob = LogitDraw(team1.FifaPoints[0], team2.FifaPoints[0], 0);
+            
+            double normalFactor = team1prob + team2prob + drawprob;
 
-            double team1Avg = (team1Home + team1Away) / 2;
-            double team2Avg = (team2Home + team2Away) / 2;
-            double drawAvg  = (drawHome + drawAway) / 2;
+            team1prob /= normalFactor;
+            team2prob /= normalFactor;
+            drawprob /= normalFactor;
 
-            double normalFactor = team1Avg + team2Avg + drawAvg;
-
-            team1Avg /= normalFactor;
-            team2Avg /= normalFactor;
-            drawAvg  /= normalFactor;
-
-            return new Tuple<double, double, double>(team1Avg, team2Avg, drawAvg);
+            return new Tuple<double, double, double>(team1prob, team2prob, drawprob);
         }
 
         private static double Logit(double fifaPoints1, double fifaPoints2, double atHome)
@@ -63,20 +56,21 @@ namespace Engine
         {
             double team1Win = GetMatchProbs(team1, team2).Item1;
             double team2Win = GetMatchProbs(team1, team2).Item2;
+            double goalsPerGame = 2.247 + 0.00085 * Math.Abs(team2.FifaPoints[0] - team1.FifaPoints[0]);
 
-            var poissonParams = ParamFinder.FindParams(team1Win, team2Win);
+            var poissonParams = ParamFinder.FindParams(team1Win, team2Win, goalsPerGame);
 
             double poiss1 = poissonParams.Item1;
             double poiss2 = poissonParams.Item2;
 
-            double[][] retGrid = new double[5][];
+            double[][] retGrid = new double[6][];
 
-            for (int i =0; i< 5; i++)
+            for (int i =0; i< 6; i++)
             {
-                retGrid[i] = new double[5];
+                retGrid[i] = new double[6];
 
-                for (int j = 0; j < 5; j++)
-                    retGrid[i][j] = 1 / (MyMath.Poisson(poiss1, i) * MyMath.Poisson(poiss2, j));
+                for (int j = 0; j < 6; j++)
+                    retGrid[i][j] = (MyMath.Poisson(poiss1, i) * MyMath.Poisson(poiss2, j));
             }
 
             return retGrid;

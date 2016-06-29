@@ -5,17 +5,17 @@
 
         <tr>
             <td>@Model.Team1.Name to win</td>
-            <td>@Model.MatchDigiOdds.Item1.ToString("0.00")</td>
+            <td>@Model.MatchDigiOdds.Item1.RoundTo3Sf()</td>
             <td>@Model.MatchOldEnglishOdds.Item1</td>
         </tr>
         <tr>
             <td>@Model.Team2.Name to win</td>
-            <td>@Model.MatchDigiOdds.Item2.ToString("0.00")</td>
+            <td>@Model.MatchDigiOdds.Item2.RoundTo3Sf()</td>
             <td>@Model.MatchOldEnglishOdds.Item2</td>
         </tr>
         <tr>
-            <td>The draw</td>
-            <td>@Model.MatchDigiOdds.Item3.ToString("0.00")</td>
+            <td>Draw</td>
+            <td>@Model.MatchDigiOdds.Item3.RoundTo3Sf()</td>
             <td>@Model.MatchOldEnglishOdds.Item3</td>
         </tr>
     </table>
@@ -23,10 +23,10 @@
 
 <table class="table table-bordered">
     <tr>
-        <th></th>
+        <td></td>
         @for (int i = 0; i < @Model.ScoreGrid.Length; i++)
         {
-            <th>@i</th>
+            <td>@i</td>
         }
     </tr>
 
@@ -37,9 +37,22 @@
             <td>@i</td>
             @foreach (var x in @Model.ScoreGrid[i])
             {
-                <td>@x.ToString("0.00")</td>
+                <td>@((1 / x).RoundTo3Sf())</td>
             }
         </tr>
     }
 
+</table>
+
+<table class="table table-bordered">
+    @for (int i = 0; i < Model.ScoreGrid.Length; i++)
+    {
+        for (int j = 0; j < Model.ScoreGrid.Length; j++)
+        {
+            <tr>
+                <td>@i - @j</td>
+                <td>@((1 / Model.ScoreGrid[i][j]).RoundTo3Sf())</td>
+            </tr>
+        }
+    }
 </table>
